@@ -1,0 +1,17 @@
+# WebStorm
+.idea/
+
+# vi
+*~
+
+# General
+log/
+*.log
+
+# Composer
+composer.phar
+/vendor/
+
+# Node
+node_modules/
+jspm_packages/

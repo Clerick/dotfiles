@@ -1,0 +1,6 @@
+alias home='cd ~'
+alias ..='cd ..'
+alias ...='cd ../..'
+alias ....='cd ../../..'
+alias ls='ls -A'
+alias c="clear"

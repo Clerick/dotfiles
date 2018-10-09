@@ -1,0 +1,6 @@
+[user]
+name = Clerick
+email = 13_spirit@mail.ru
+[core]
+excludesfile = ~/.gitignore
+editor = /usr/bin/nvim
