@@ -137,7 +137,7 @@ assign [class="Rambox"] $ws4
 
 # run programs
 exec --no-startup-id feh --bg-scale ~/Изображения/phoenix.jpg
-exec_always --no-startup-id "killapp compton; compton"
+exec --no-startup-id "killapp compton; compton"
 
 # reload the configuration file
 bindsym $mod+Shift+c reload
@@ -179,7 +179,7 @@ bindsym $mod+r mode "resize"
 #        status_command i3status
 #}
 
-exec_always --no-startup-id "killall polybar; polybar -r default"
+exec_always --no-startup-id $HOME/dotfiles/config/polybar/launch.sh
 
 for_window [class="^.*"] border pixel 2
 gaps inner 7

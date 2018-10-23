@@ -245,6 +245,7 @@ Plugin 'ryanoasis/vim-devicons'
 Plugin 'scrooloose/nerdtree'
 Plugin 'airblade/vim-gitgutter'
 Plugin 'Yggdroot/indentLine'
+Plugin 'chrisbra/sudoedit.vim'
 
 " Code
 Plugin 'terryma/vim-multiple-cursors'
