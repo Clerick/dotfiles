@@ -179,8 +179,8 @@ map <leader>h :bprevious<cr>
 map <leader>tn :tabnew<cr>
 map <leader>to :tabonly<cr>
 map <leader>tc :tabclose<cr>
-map <leader>tm :tabmove 
-map <leader>t<leader> :tabnext 
+map <leader>tm :tabmove
+map <leader>t<leader> :tabnext
 
 " Let 'tl' toggle between this and the last accessed tab
 let g:lasttab = 1
@@ -243,35 +243,47 @@ Plugin 'vim-airline/vim-airline'
 Plugin 'vim-airline/vim-airline-themes'
 Plugin 'ryanoasis/vim-devicons'
 Plugin 'scrooloose/nerdtree'
-Plugin 'airblade/vim-gitgutter'
 Plugin 'Yggdroot/indentLine'
 Plugin 'chrisbra/sudoedit.vim'
+Plugin 'ctrlpvim/ctrlp.vim'
+Plugin 'airblade/vim-gitgutter'
+Plugin 'tpope/vim-surround'
+Plugin 'godlygeek/tabular'
 
 " Code
+Plugin 'vim-syntastic/syntastic'
+Plugin 'StanAngeloff/php.vim'
+Plugin 'Chiel92/vim-autoformat'
+Plugin 'othree/html5.vim'
 Plugin 'terryma/vim-multiple-cursors'
 Plugin 'jiangmiao/auto-pairs'
-Plugin 'tpope/vim-commentary'
+Plugin 'scrooloose/nerdcommenter'
 Plugin 'mattn/emmet-vim'
 Plugin 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-Plugin 'autozimu/LanguageClient-neovim', {
-    \ 'branch': 'next',
-    \ 'do': 'bash install.sh',
-    \ }
-Plugin 'junegunn/fzf'
-Plugin 'junegunn/fzf.vim'
-Plugin 'roxma/LanguageServer-php-neovim',  {'do': 'composer install && composer run-script parse-stubs'}
-Plugin 'neomake/neomake'
-Plugin 'stephpy/vim-php-cs-fixer'
-Plugin 'adoy/vim-php-refactoring-toolbox'
-Plugin 'mhinz/vim-signify'
 Plugin 'majutsushi/tagbar'
+Plugin 'shawncplus/phpcomplete.vim'
+
 
 call vundle#end()
+
 filetype plugin indent on
 
+" Syntastic
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 0
+
+let g:syntastic_php_checkers = ['php', 'phpcs', 'phpmd']
+let g:syntastic_php_phpcs_exec = './bin/phpcs'
+let g:syntastic_php_phpcs_args = '--standard=psr2'
+let g:syntastic_php_phpmd_exec = './bin/phpmd'
+let g:syntastic_php_phpmd_post_args = 'cleancode,codesize,controversial,design,unusedcode'
+
+" Airline
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#formatter = 'unique_tail_improved'
-let g:airline_theme='badcat'
+let g:airline_theme='tomorrow'
 let g:airline_powerline_fonts = 1
 
 " Nerd Tree
@@ -315,26 +327,12 @@ set listchars=trail:.
 " Deoplete
 let g:deoplete#enable_at_startup = 1
 
-" PHP language Client and Server config
-" only start lsp when opening php files
-au filetype php LanguageClientStart
-
-" php-cs-fixer
-let g:php_cs_fixer_rules = "@PSR2"
-nnoremap <silent><leader>ff :call PhpCsFixerFixFile()<CR>
-
-nnoremap <silent> gd :call LanguageClient_textDocument_definition()<CR>
-nnoremap <silent> gr :call LanguageClient_textDocument_references()<CR>
-nnoremap K :call LanguageClient_textDocument_hover()<cr>
-
-" Neomake
-autocmd BufWritePost * Neomake
-let g:neomake_error_sign   = {'text': '✖', 'texthl': 'NeomakeErrorSign'}
-let g:neomake_warning_sign = {'text': '∆', 'texthl': 'NeomakeWarningSign'}
-let g:neomake_message_sign = {'text': '➤', 'texthl': 'NeomakeMessageSign'}
-let g:neomake_info_sign    = {'text': 'ℹ', 'texthl': 'NeomakeInfoSign'}
-let g:neomake_open_list = 2
-call neomake#configure#automake('nrw', 500)
-
 " Tagbar
 nmap <F8> :TagbarToggle<CR>
+
+" Format code bo ctrl+alt+f
+noremap <C-A-f> :Autoformat<CR>
+
+" Comment code
+let g:NERDCreateDefaultMappings = 0
+noremap <C-S-/> <C-o>:call NERDComment(0,"toggle")<C-m>

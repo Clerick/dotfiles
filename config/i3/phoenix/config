@@ -130,14 +130,18 @@ bindsym $mod+Shift+9 move container to workspace $ws9
 bindsym $mod+Shift+0 move container to workspace $ws10
 
 # set programs workspaces
+# to find class use xprop
 assign [class="Firefox"] $ws1
 assign [class="Chromium"] $ws1
 assign [class="Atom"] $ws2
-assign [class="Rambox"] $ws4
+assign [class="Apache NetBeans IDE 9.0"] $ws2
 
 # run programs
 exec --no-startup-id feh --bg-scale ~/Изображения/phoenix.jpg
 exec --no-startup-id "killapp compton; compton"
+exec_always --no-startup-id $HOME/dotfiles/config/polybar/launch.sh
+exec firefox
+exec $HOME/WebStorm-181.5087.27/bin/webstorm.sh
 
 # reload the configuration file
 bindsym $mod+Shift+c reload
@@ -179,10 +183,8 @@ bindsym $mod+r mode "resize"
 #        status_command i3status
 #}
 
-exec_always --no-startup-id $HOME/dotfiles/config/polybar/launch.sh
-
 for_window [class="^.*"] border pixel 2
-gaps inner 7
+# gaps inner 7
 # smart_gaps on
 # smart_borders on
 # workspace $ws1 gaps inner 0
