@@ -44,10 +44,6 @@ nmap <leader>w :w!<cr>
 " jk to normal mode
 inoremap jk <ESC>
 
-" :W sudo saves the file 
-" (useful for handling the permission-denied error)
-command W w !sudo tee % > /dev/null
-
 " Vundle requirements
 set nocompatible              " be iMproved, required
 filetype off                  " required
@@ -74,23 +70,23 @@ set whichwrap+=<,>,h,l
 " Ignore case when searching
 set ignorecase
 
-" When searching try to be smart about cases 
+" When searching try to be smart about cases
 set smartcase
 
 " Highlight search results
 set hlsearch
 
 " Makes search act like search in modern browsers
-set incsearch 
+set incsearch
 
 " Don't redraw while executing macros (good performance config)
-set lazyredraw 
+set lazyredraw
 
 " For regular expressions turn magic on
 set magic
 
 " Show matching brackets when text indicator is over them
-set showmatch 
+set showmatch
 " How many tenths of a second to blink when matching brackets
 set mat=2
 
@@ -106,7 +102,7 @@ set tm=500
 " => Colors and Fonts
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Enable syntax highlighting
-syntax enable 
+syntax enable
 
 " Set extra options when running in GUI mode
 if has("gui_running")
@@ -122,6 +118,8 @@ set encoding=utf8
 " Use Unix as the standard file type
 set ffs=unix,dos,mac
 
+" Colors
+colorscheme iceberg
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Files, backups and undo
@@ -192,13 +190,10 @@ au TabLeave * let g:lasttab = tabpagenr()
 " Super useful when editing files in the same directory
 map <leader>te :tabedit <c-r>=expand("%:p:h")<cr>/
 
-" Switch CWD to the directory of the open buffer
-map <leader>cd :cd %:p:h<cr>:pwd<cr>
-
-" Specify the behavior when switching between buffers 
+" Specify the behavior when switching between buffers
 try
-  set switchbuf=useopen,usetab,newtab
-  set stal=2
+    set switchbuf=useopen,usetab,newtab
+    set stal=2
 catch
 endtry
 
@@ -243,16 +238,29 @@ Plugin 'vim-airline/vim-airline'
 Plugin 'vim-airline/vim-airline-themes'
 Plugin 'ryanoasis/vim-devicons'
 Plugin 'scrooloose/nerdtree'
+Plugin 'xuyuanp/nerdtree-git-plugin'
 Plugin 'Yggdroot/indentLine'
-Plugin 'chrisbra/sudoedit.vim'
 Plugin 'ctrlpvim/ctrlp.vim'
 Plugin 'airblade/vim-gitgutter'
 Plugin 'tpope/vim-surround'
 Plugin 'godlygeek/tabular'
+Plugin 'tpope/vim-fugitive'
+Plugin 'ervandew/supertab'
+
+" Themes
+Plugin 'altercation/vim-colors-solarized'
+Plugin 'junegunn/seoul256.vim'
+Plugin 'cocopon/iceberg.vim'
+Plugin 'drewtempelmeyer/palenight.vim'
+
+" Langs
+Plugin 'StanAngeloff/php.vim'
+Plugin 'shawncplus/phpcomplete.vim'
+Plugin 'hail2u/vim-css3-syntax'
+Plugin 'ap/vim-css-color'
 
 " Code
-Plugin 'vim-syntastic/syntastic'
-Plugin 'StanAngeloff/php.vim'
+Plugin 'w0rp/ale'
 Plugin 'Chiel92/vim-autoformat'
 Plugin 'othree/html5.vim'
 Plugin 'terryma/vim-multiple-cursors'
@@ -261,30 +269,33 @@ Plugin 'scrooloose/nerdcommenter'
 Plugin 'mattn/emmet-vim'
 Plugin 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 Plugin 'majutsushi/tagbar'
-Plugin 'shawncplus/phpcomplete.vim'
 
 
 call vundle#end()
 
 filetype plugin indent on
 
-" Syntastic
-let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_auto_loc_list = 1
-let g:syntastic_check_on_open = 1
-let g:syntastic_check_on_wq = 0
-
-let g:syntastic_php_checkers = ['php', 'phpcs', 'phpmd']
-let g:syntastic_php_phpcs_exec = './bin/phpcs'
-let g:syntastic_php_phpcs_args = '--standard=psr2'
-let g:syntastic_php_phpmd_exec = './bin/phpmd'
-let g:syntastic_php_phpmd_post_args = 'cleancode,codesize,controversial,design,unusedcode'
-
 " Airline
+let g:airline#extensions#ale#enabled = 1
 let g:airline#extensions#tabline#enabled = 1
-let g:airline#extensions#tabline#formatter = 'unique_tail_improved'
+let airline#extensions#ale#show_line_numbers = 1
 let g:airline_theme='tomorrow'
 let g:airline_powerline_fonts = 1
+
+" Ale
+let g:ale_fixers = {
+\    'php': ['php-cs-fixer', 'phpmd', 'phpstan'],
+\}
+let g:ale_echo_msg_error_str = 'E'
+let g:ale_echo_msg_warning_str = 'W'
+let g:ale_sign_error = ''
+let g:ale_sign_warning = ''
+highlight ALEErrorSign ctermfg=9 guifg=#C30500
+highlight ALEWarningSign ctermfg=214 guifg=#ED6237
+let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
+let g:ale_php_phpcs_standard = 'PSR2'
+let g:ale_php_phpcs_options = '--extensions=php,inc,lib --tab-width=4'
+let g:ale_php_phpstan_level = 1
 
 " Nerd Tree
 autocmd StdinReadPre * let s:std_in=1
@@ -296,8 +307,8 @@ let g:NERDTreeDirArrowCollapsible = ''
 
 " NERDTress File highlighting
 function! NERDTreeHighlightFile(extension, fg, bg, guifg, guibg)
- exec 'autocmd filetype nerdtree highlight ' . a:extension .' ctermbg='. a:bg .' ctermfg='. a:fg .' guibg='. a:guibg .' guifg='. a:guifg
- exec 'autocmd filetype nerdtree syn match ' . a:extension .' #^\s\+.*'. a:extension .'$#'
+    exec 'autocmd filetype nerdtree highlight ' . a:extension .' ctermbg='. a:bg .' ctermfg='. a:fg .' guibg='. a:guibg .' guifg='. a:guifg
+    exec 'autocmd filetype nerdtree syn match ' . a:extension .' #^\s\+.*'. a:extension .'$#'
 endfunction
 
 call NERDTreeHighlightFile('jade', 'green', 'none', 'green', '#151515')
@@ -330,9 +341,15 @@ let g:deoplete#enable_at_startup = 1
 " Tagbar
 nmap <F8> :TagbarToggle<CR>
 
-" Format code bo ctrl+alt+f
+" Format code by ctrl+alt+f
 noremap <C-A-f> :Autoformat<CR>
 
-" Comment code
-let g:NERDCreateDefaultMappings = 0
-noremap <C-S-/> <C-o>:call NERDComment(0,"toggle")<C-m>
+" NERDCommenter
+let g:NERDSpaceDelims = 1
+let g:NERDCommentEmptyLines = 1
+let g:NERDToggleCheckAllLines = 1
+nmap <C-_> <leader>c<space>
+vmap <C-_> <leader>c<space>
+
+" Supertab
+let g:SuperTabDefaultCompletionType = "<c-n>"
