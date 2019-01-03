@@ -1,7 +1,6 @@
-alias home='cd ~'
 alias ..='cd ..'
 alias ...='cd ../..'
 alias ....='cd ../../..'
 alias cl='clear'
 alias pya='ping ya.ru'
-alias phpstorm='./~/PhpStorm2018.1/bin/phpstorm.sh'
+alias ls='ls --color=auto'
