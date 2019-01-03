@@ -96,6 +96,10 @@ set novisualbell
 set t_vb=
 set tm=500
 
+" Open new split panes to right and bottom, which feels more natural than Vim’s default
+set splitbelow
+set splitright
+
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -163,28 +167,32 @@ vnoremap <silent> # :<C-u>call VisualSelection('', '')<CR>?<C-R>=@/<CR><CR>
 " Disable highlight when <leader><cr> is pressed
 map <silent> <leader><cr> :noh<cr>
 
-
-" Close the current buffer
-map <leader>bd :Bclose<cr>:tabclose<cr>gT
-
-" Close all the buffers
+" Buffer mappings
+" map <leader>bd :Bclose<cr>:tabclose<cr>gT
+map <C-W> :bd<cr>
 map <leader>ba :bufdo bd<cr>
+nnoremap K :bnext<cr>
+nnoremap J :bprevious<cr>
 
-map <leader>l :bnext<cr>
-map <leader>h :bprevious<cr>
-
-" Useful mappings for managing tabs
+" Mappings for managing tabs
 map <leader>tn :tabnew<cr>
 map <leader>to :tabonly<cr>
 map <leader>tc :tabclose<cr>
 map <leader>tm :tabmove
 map <leader>t<leader> :tabnext
 
+" Mappings for splits navigation
+nnoremap <C-J> <C-W><C-J>
+nnoremap <C-K> <C-W><C-K>
+nnoremap <C-L> <C-W><C-L>
+nnoremap <C-H> <C-W><C-H>
+" swap splits
+nnoremap <leader>sw <C-W>R
+
 " Let 'tl' toggle between this and the last accessed tab
 let g:lasttab = 1
-nmap <Leader>tl :exe "tabn ".g:lasttab<CR>
+nmap <Leader>tl :exe "tabn ".g:lasttab<cr>
 au TabLeave * let g:lasttab = tabpagenr()
-
 
 " Opens a new tab with the current buffer's path
 " Super useful when editing files in the same directory
@@ -208,10 +216,14 @@ au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g
 map 0 ^
 
 " Move a line of text using ALT+[jk] or Command+[jk] on mac
-nmap <C-j> mz:m+<cr>`z
-nmap <C-k> mz:m-2<cr>`z
-vmap <C-j> :m'>+<cr>`<my`>mzgv`yo`z
-vmap <C-k> :m'<-2<cr>`>my`<mzgv`yo`z
+nmap <M-j> mz:m+<cr>`z
+nmap <M-k> mz:m-2<cr>`z
+vmap <M-j> :m'>+<cr>`<my`>mzgv`yo`z
+vmap <M-k> :m'<-2<cr>`>my`<mzgv`yo`z
+
+
+" Open terminal
+map <leader>t :terminal<cr>
 
 " Delete trailing white space on save, useful for some filetypes ;)
 fun! CleanExtraSpaces()
@@ -245,7 +257,8 @@ Plugin 'airblade/vim-gitgutter'
 Plugin 'tpope/vim-surround'
 Plugin 'godlygeek/tabular'
 Plugin 'tpope/vim-fugitive'
-Plugin 'ervandew/supertab'
+Plugin 'easymotion/vim-easymotion'
+Plugin 'yuttie/comfortable-motion.vim'
 
 " Themes
 Plugin 'altercation/vim-colors-solarized'
@@ -256,6 +269,7 @@ Plugin 'drewtempelmeyer/palenight.vim'
 " Langs
 Plugin 'StanAngeloff/php.vim'
 Plugin 'shawncplus/phpcomplete.vim'
+Plugin 'phpactor/phpactor' ,  {'do': 'composer install', 'for': 'php'}
 Plugin 'hail2u/vim-css3-syntax'
 Plugin 'ap/vim-css-color'
 
@@ -268,6 +282,9 @@ Plugin 'jiangmiao/auto-pairs'
 Plugin 'scrooloose/nerdcommenter'
 Plugin 'mattn/emmet-vim'
 Plugin 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+Plugin 'kristijanhusak/deoplete-phpactor'
+Plugin 'Shougo/neosnippet.vim'
+Plugin 'Shougo/neosnippet-snippets'
 Plugin 'majutsushi/tagbar'
 
 
@@ -277,8 +294,8 @@ filetype plugin indent on
 
 " Airline
 let g:airline#extensions#ale#enabled = 1
-let g:airline#extensions#tabline#enabled = 1
 let airline#extensions#ale#show_line_numbers = 1
+let g:airline#extensions#tabline#enabled = 1
 let g:airline_theme='tomorrow'
 let g:airline_powerline_fonts = 1
 
@@ -286,12 +303,11 @@ let g:airline_powerline_fonts = 1
 let g:ale_fixers = {
 \    'php': ['php-cs-fixer', 'phpmd', 'phpstan'],
 \}
+let g:ale_sign_column_always = 1
 let g:ale_echo_msg_error_str = 'E'
 let g:ale_echo_msg_warning_str = 'W'
 let g:ale_sign_error = ''
 let g:ale_sign_warning = ''
-highlight ALEErrorSign ctermfg=9 guifg=#C30500
-highlight ALEWarningSign ctermfg=214 guifg=#ED6237
 let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
 let g:ale_php_phpcs_standard = 'PSR2'
 let g:ale_php_phpcs_options = '--extensions=php,inc,lib --tab-width=4'
@@ -337,6 +353,8 @@ set listchars=trail:.
 
 " Deoplete
 let g:deoplete#enable_at_startup = 1
+let g:deoplete#sources = {}
+let g:deoplete#sources.php = ['omni', 'phpactor', 'ultisnips', 'buffer', 'neosnippet']
 
 " Tagbar
 nmap <F8> :TagbarToggle<CR>
@@ -351,5 +369,51 @@ let g:NERDToggleCheckAllLines = 1
 nmap <C-_> <leader>c<space>
 vmap <C-_> <leader>c<space>
 
-" Supertab
-let g:SuperTabDefaultCompletionType = "<c-n>"
+" Easymotion
+nmap <space> <Plug>(easymotion-overwin-f)
+map <Leader>j <Plug>(easymotion-j)
+map <Leader>k <Plug>(easymotion-k)
+let g:EasyMotion_smartcase = 1
+" Smartsign (type `3` and match `3`&`#`)
+let g:EasyMotion_use_smartsign_us = 1
+
+" Comfortable motion
+let g:comfortable_motion_scroll_down_key = "j"
+let g:comfortable_motion_scroll_up_key = "k"
+noremap <silent> <ScrollWheelDown> :call comfortable_motion#flick(40)<CR>
+noremap <silent> <ScrollWheelUp>   :call comfortable_motion#flick(-40)<CR>
+
+" Phpactor
+" Automatically import classes when completing class names with OmniComplete
+let g:phpactorOmniAutoClassImport = v:true
+" Include use statement
+nmap <Leader>u :call phpactor#UseAdd()<CR>
+" Invoke the context menu
+nmap <Leader>mm :call phpactor#ContextMenu()<CR>
+" Invoke the navigation menu
+nmap <Leader>nn :call phpactor#Navigate()<CR>
+" Goto definition of class or class member under the cursor
+nmap <Leader>o :call phpactor#GotoDefinition()<CR>
+" Show brief information about the symbol under the cursor
+nmap <Leader>K :call phpactor#Hover()<CR>
+" Transform the classes in the current file
+nmap <Leader>tt :call phpactor#Transform()<CR>
+" Generate a new class (replacing the current file)
+nmap <Leader>cc :call phpactor#ClassNew()<CR>
+" Extract expression (normal mode)
+nmap <silent><Leader>ee :call phpactor#ExtractExpression(v:false)<CR>
+" Extract expression from selection
+vmap <silent><Leader>ee :<C-U>call phpactor#ExtractExpression(v:true)<CR>
+" Extract method from selection
+vmap <silent><Leader>em :<C-U>call phpactor#ExtractMethod()<CR>
+
+" Neosnippets
+" Plugin key-mappings.
+" Note: It must be "imap" and "smap".  It uses <Plug> mappings.
+imap <C-k>     <Plug>(neosnippet_expand_or_jump)
+smap <C-k>     <Plug>(neosnippet_expand_or_jump)
+xmap <C-k>     <Plug>(neosnippet_expand_target)
+" For conceal markers.
+if has('conceal')
+  set conceallevel=2 concealcursor=niv
+endif
