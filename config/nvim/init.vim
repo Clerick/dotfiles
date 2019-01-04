@@ -25,6 +25,10 @@ set history=500
 " Set numbers for lines
 set number
 
+" Set cursor highlighting
+set cursorline
+set cursorcolumn
+
 " Enable filetype plugins
 filetype plugin on
 filetype indent on
