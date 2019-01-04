@@ -41,6 +41,9 @@ set timeoutlen=500
 " Fast saving
 nmap <leader>w :w!<cr>
 
+" sudo saving
+nmap <leader>ws :w suda://%<cr>
+
 " jk to normal mode
 inoremap jk <ESC>
 
@@ -260,6 +263,7 @@ Plugin 'tpope/vim-fugitive'
 Plugin 'easymotion/vim-easymotion'
 Plugin 'yuttie/comfortable-motion.vim'
 Plugin 'moll/vim-bbye'
+Plugin 'lambdalisue/suda.vim'
 
 " Themes
 Plugin 'altercation/vim-colors-solarized'

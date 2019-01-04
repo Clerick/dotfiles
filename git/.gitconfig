@@ -1,11 +1,11 @@
 [user]
-	name = Clerick
-	email = 13_spirit@mail.ru
+    name = Clerick
+    email = 13_spirit@mail.ru
 [core]
-excludesfile = ~/.gitignore
-editor = /usr/bin/nvim
+    excludesfile = ~/.gitignore
+    editor = /usr/bin/nvim
 [filter "lfs"]
-	clean = git-lfs clean -- %f
-	smudge = git-lfs smudge -- %f
-	process = git-lfs filter-process
-	required = true
+    clean = git-lfs clean -- %f
+    smudge = git-lfs smudge -- %f
+    process = git-lfs filter-process
+    required = true
