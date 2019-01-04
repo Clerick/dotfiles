@@ -168,8 +168,8 @@ vnoremap <silent> # :<C-u>call VisualSelection('', '')<CR>?<C-R>=@/<CR><CR>
 map <silent> <leader><cr> :noh<cr>
 
 " Buffer mappings
-" map <leader>bd :Bclose<cr>:tabclose<cr>gT
-map <C-W> :bd<cr>
+" using bbye plugin to close buffer
+map <C-W> :Bdelete<cr>
 map <leader>ba :bufdo bd<cr>
 nnoremap K :bnext<cr>
 nnoremap J :bprevious<cr>
@@ -259,6 +259,7 @@ Plugin 'godlygeek/tabular'
 Plugin 'tpope/vim-fugitive'
 Plugin 'easymotion/vim-easymotion'
 Plugin 'yuttie/comfortable-motion.vim'
+Plugin 'moll/vim-bbye'
 
 " Themes
 Plugin 'altercation/vim-colors-solarized'
@@ -270,13 +271,13 @@ Plugin 'drewtempelmeyer/palenight.vim'
 Plugin 'StanAngeloff/php.vim'
 Plugin 'shawncplus/phpcomplete.vim'
 Plugin 'phpactor/phpactor' ,  {'do': 'composer install', 'for': 'php'}
+Plugin 'othree/html5.vim'
 Plugin 'hail2u/vim-css3-syntax'
 Plugin 'ap/vim-css-color'
 
 " Code
 Plugin 'w0rp/ale'
 Plugin 'Chiel92/vim-autoformat'
-Plugin 'othree/html5.vim'
 Plugin 'terryma/vim-multiple-cursors'
 Plugin 'jiangmiao/auto-pairs'
 Plugin 'scrooloose/nerdcommenter'
@@ -286,6 +287,8 @@ Plugin 'kristijanhusak/deoplete-phpactor'
 Plugin 'Shougo/neosnippet.vim'
 Plugin 'Shougo/neosnippet-snippets'
 Plugin 'majutsushi/tagbar'
+Plugin 'vim-vdebug/vdebug'
+Plugin 'editorconfig/editorconfig-vim'
 
 
 call vundle#end()
@@ -354,7 +357,7 @@ set listchars=trail:.
 " Deoplete
 let g:deoplete#enable_at_startup = 1
 let g:deoplete#sources = {}
-let g:deoplete#sources.php = ['omni', 'phpactor', 'ultisnips', 'buffer', 'neosnippet']
+let g:deoplete#sources.php = ['omni', 'phpactor', 'ultisnips', 'buffer', 'neosnippet', 'matcher_full_fuzzy']
 
 " Tagbar
 nmap <F8> :TagbarToggle<CR>
@@ -417,3 +420,6 @@ xmap <C-k>     <Plug>(neosnippet_expand_target)
 if has('conceal')
   set conceallevel=2 concealcursor=niv
 endif
+
+" Editorconfig
+let g:EditorConfig_exclude_patterns = ['fugitive://.*', 'scp://.*']
