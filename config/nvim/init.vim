@@ -25,10 +25,6 @@ set history=500
 " Set numbers for lines
 set number
 
-" Set cursor highlighting
-set cursorline
-set cursorcolumn
-
 " Enable filetype plugins
 filetype plugin on
 filetype indent on
@@ -55,6 +51,10 @@ inoremap jk <ESC>
 set nocompatible              " be iMproved, required
 filetype off                  " required
 
+" Save on focus lost
+:au FocusLost * :wa
+:set autowriteall
+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " VIM user interface
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -63,6 +63,10 @@ set so=10
 
 "Always show current position
 set ruler
+
+" Set cursor highlighting
+set cursorline
+set cursorcolumn
 
 " Height of the command bar
 " set cmdheight=2
@@ -106,7 +110,6 @@ set tm=500
 " Open new split panes to right and bottom, which feels more natural than Vim’s default
 set splitbelow
 set splitright
-
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -245,6 +248,9 @@ if has("autocmd")
     autocmd BufWritePre *.txt,*.js,*.php,*.py,*.wiki,*.sh,*.coffee :call CleanExtraSpaces()
 endif
 
+" Go to new line
+imap ;; <C-O>o
+
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Vundle plugins
@@ -297,7 +303,9 @@ Plugin 'Shougo/neosnippet-snippets'
 Plugin 'majutsushi/tagbar'
 Plugin 'vim-vdebug/vdebug'
 Plugin 'editorconfig/editorconfig-vim'
-
+Plugin 'ervandew/supertab'
+Plugin 'tpope/vim-repeat'
+Plugin 'lfilho/cosco.vim'
 
 call vundle#end()
 
@@ -325,6 +333,7 @@ let g:ale_php_phpcs_options = '--extensions=php,inc,lib --tab-width=4'
 let g:ale_php_phpstan_level = 1
 
 " Nerd Tree
+let NERDTreeShowHidden=1
 autocmd StdinReadPre * let s:std_in=1
 autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists("s:std_in") | exe 'NERDTree' argv()[0] | wincmd p | ene | endif
 map <C-o> :NERDTreeToggle<CR>
@@ -353,7 +362,8 @@ call NERDTreeHighlightFile('js', 'Red', 'none', '#ffa500', '#151515')
 call NERDTreeHighlightFile('php', 'Magenta', 'none', '#ff00ff', '#151515')
 
 " Emmet
-imap <expr> <tab> emmet#expandAbbrIntelligent("\<tab>")
+" imap <expr> <tab> emmet#expandAbbrIntelligent("\<tab>")
+let g:user_emmet_leader_key='<C-e>'
 
 " Indents
 let g:indentLine_char = '▏'
@@ -431,3 +441,10 @@ endif
 
 " Editorconfig
 let g:EditorConfig_exclude_patterns = ['fugitive://.*', 'scp://.*']
+
+" Supertab
+let g:SuperTabDefaultCompletionType = "<c-n>"
+
+" Cosco (semicolon)
+nmap <silent> <Leader>; <Plug>(cosco-commaOrSemiColon)
+imap <silent> <Leader>; <c-o><Plug>(cosco-commaOrSemiColon)
