@@ -439,6 +439,11 @@ if has('conceal')
   set conceallevel=2 concealcursor=niv
 endif
 
+" Vdebug
+let g:vdebug_options = {
+    \    'break_on_open' : 0,
+    \}
+
 " Editorconfig
 let g:EditorConfig_exclude_patterns = ['fugitive://.*', 'scp://.*']
 
