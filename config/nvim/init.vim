@@ -291,7 +291,8 @@ Plugin 'ap/vim-css-color'
 
 " Code
 Plugin 'w0rp/ale'
-Plugin 'Chiel92/vim-autoformat'
+" Plugin 'Chiel92/vim-autoformat'
+Plugin 'sbdchd/neoformat'
 Plugin 'terryma/vim-multiple-cursors'
 Plugin 'jiangmiao/auto-pairs'
 Plugin 'scrooloose/nerdcommenter'
@@ -320,8 +321,8 @@ let g:airline_powerline_fonts = 1
 
 " Ale
 let g:ale_fixers = {
-\    'php': ['php-cs-fixer', 'phpmd', 'phpstan'],
-\}
+            \    'php': ['phpcs', 'phpmd', 'phpstan'],
+            \}
 let g:ale_sign_column_always = 1
 let g:ale_echo_msg_error_str = 'E'
 let g:ale_echo_msg_warning_str = 'W'
@@ -380,8 +381,23 @@ let g:deoplete#sources.php = ['omni', 'phpactor', 'ultisnips', 'buffer', 'neosni
 " Tagbar
 nmap <F8> :TagbarToggle<CR>
 
-" Format code by ctrl+alt+f
-noremap <C-A-f> :Autoformat<CR>
+" Neoformat. Format code by ctrl+alt+f
+noremap <C-A-f> :Neoformat<CR>
+" Enable basic formatting when a filetype is not found. Disabled by default.
+" Enable alignment
+let g:neoformat_basic_format_align = 1
+" Enable tab to spaces conversion
+let g:neoformat_basic_format_retab = 1
+" Enable trimmming of trailing whitespace
+let g:neoformat_basic_format_trim = 1
+" Configure php-cs-fixer to remove unused statement
+let g:neoformat_php_phpcsfixer = {
+\ 'exe': 'php-cs-fixer',
+\ 'args': ['fix', '--rules=no_unused_imports'],
+\ 'replace': 1,
+\ }
+
+let g:neoformat_enabled_php = ['phpcsfixer']
 
 " NERDCommenter
 let g:NERDSpaceDelims = 1
@@ -436,13 +452,13 @@ smap <C-k>     <Plug>(neosnippet_expand_or_jump)
 xmap <C-k>     <Plug>(neosnippet_expand_target)
 " For conceal markers.
 if has('conceal')
-  set conceallevel=2 concealcursor=niv
+    set conceallevel=2 concealcursor=niv
 endif
 
 " Vdebug
 let g:vdebug_options = {
-    \    'break_on_open' : 0,
-    \}
+            \    'break_on_open' : 0,
+            \}
 
 " Editorconfig
 let g:EditorConfig_exclude_patterns = ['fugitive://.*', 'scp://.*']
